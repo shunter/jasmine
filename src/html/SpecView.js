@@ -2,7 +2,7 @@ jasmine.HtmlReporter.SpecView = function(spec, dom, views) {
   var createDom = jasmine.HtmlReporter.createDom;
 
   this.status = function() {
-    return getStatus(spec);
+    return jasmine.HtmlReporter.getSpecStatus(spec);
   };
 
   this.refresh = function() {
@@ -75,16 +75,6 @@ jasmine.HtmlReporter.SpecView = function(spec, dom, views) {
 
   return this;
 
-  function getStatus(child) {
-    var results = child.results();
-    var status = results.passed() ? 'passed' : 'failed';
-    if (results.skipped) {
-      status = 'skipped';
-    }
-
-    return status;
-  }
-
   function appendToSummary(child, childElement) {
     var parentDiv = dom.summary;
     var parentSuite = (typeof child.parentSuite == 'undefined') ? 'suite' : 'parentSuite';
@@ -103,7 +93,7 @@ jasmine.HtmlReporter.SpecView = function(spec, dom, views) {
   function SuiteView(suite) {
 
     this.status = function() {
-      return getStatus(suite);
+      return jasmine.HtmlReporter.getSpecStatus(suite);
     };
 
     this.refresh = function() {

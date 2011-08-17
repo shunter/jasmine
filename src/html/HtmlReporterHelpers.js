@@ -23,3 +23,14 @@ jasmine.HtmlReporter.createDom = function(type, attrs, childrenVarArgs) {
 
   return el;
 };
+
+jasmine.HtmlReporter.getSpecStatus = function(child) {
+  var results = child.results();
+  var status = results.passed() ? 'passed' : 'failed';
+  if (results.skipped) {
+    status = 'skipped';
+  }
+
+  return status;
+};
+

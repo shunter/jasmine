@@ -43,12 +43,6 @@ jasmine.HtmlReporter.ReporterView = function(specs, specFilter, dom, views) {
     this.refresh();
   };
 
-  var showDetails = function() {
-    if (dom.reporter.className.search(/showDetails/) === -1) {
-      dom.reporter.className += " showDetails";
-    }
-  };
-
   this.refresh = function() {
     if (typeof this.runningAlert == 'undefined') {
       this.runningAlert = createDom('a', {href: "?", className: "runningAlert bar"});
@@ -115,4 +109,10 @@ jasmine.HtmlReporter.ReporterView = function(specs, specFilter, dom, views) {
   this.totalSpecCount = specs.length;
 
   return this;
+
+  function showDetails() {
+    if (dom.reporter.className.search(/showDetails/) === -1) {
+      dom.reporter.className += " showDetails";
+    }
+  }
 };
