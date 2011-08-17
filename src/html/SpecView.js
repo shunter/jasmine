@@ -1,10 +1,8 @@
 jasmine.HtmlReporter.SpecView = function(spec, dom, views) {
   var createDom = jasmine.HtmlReporter.createDom;
 
-  var status = getStatus(spec);
-
   this.status = function() {
-    return status;
+    return getStatus(spec);
   };
 
   this.refresh = function() {
@@ -104,10 +102,8 @@ jasmine.HtmlReporter.SpecView = function(spec, dom, views) {
 
   function SuiteView(suite) {
 
-    var status = getStatus(suite);
-
     this.status = function() {
-      return status;
+      return getStatus(suite);
     };
 
     this.refresh = function() {

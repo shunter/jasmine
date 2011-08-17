@@ -1,9 +1,9 @@
-jasmine.HtmlReporter = function(doc) {
+jasmine.HtmlReporter = function(__doc) {
   var createDom = jasmine.HtmlReporter.createDom;
   var SpecView = jasmine.HtmlReporter.SpecView;
 
   var self = this;
-  var _doc = doc || window.document;
+  var doc = __doc || window.document;
 
   var reporterView;
 
@@ -24,21 +24,21 @@ jasmine.HtmlReporter = function(doc) {
     }
 
     createReporterDom(dom, runner.env.versionString());
-    _doc.body.appendChild(dom.reporter);
+    doc.body.appendChild(dom.reporter);
 
     reporterView = new jasmine.HtmlReporter.ReporterView(specs, self.specFilter, dom, views);
 
     function createReporterDom(dom, version) {
       dom.reporter = createDom('div', { className: 'jasmine_reporter' },
-          dom.banner = createDom('div', { className: 'banner' },
-              createDom('span', { className: 'title' }, "Jasmine "),
-              createDom('span', { className: 'version' }, version)),
+        dom.banner = createDom('div', { className: 'banner' },
+          createDom('span', { className: 'title' }, "Jasmine "),
+          createDom('span', { className: 'version' }, version)),
 
-          dom.symbolSummary = createDom('ul', {className: 'symbolSummary'}),
-          dom.alert = createDom('div', {className: 'alert'}),
-          dom.results = createDom('div', {className: 'results'},
-              dom.summary = createDom('div', { className: 'summary' }),
-              dom.details = createDom('div', { id: 'details' }))
+        dom.symbolSummary = createDom('ul', {className: 'symbolSummary'}),
+        dom.alert = createDom('div', {className: 'alert'}),
+        dom.results = createDom('div', {className: 'results'},
+          dom.summary = createDom('div', { className: 'summary' }),
+          dom.details = createDom('div', { id: 'details' }))
       );
     }
   };
@@ -85,18 +85,35 @@ jasmine.HtmlReporter = function(doc) {
   };
 
   self.specFilter = function(spec) {
-    var paramMap = {};
-    var params = _doc.location.search.substring(1).split('&');
-    for (var i = 0; i < params.length; i++) {
-      var p = params[i].split('=');
-      paramMap[decodeURIComponent(p[0])] = decodeURIComponent(p[1]);
-    }
-
-    if (!paramMap.spec) {
+    if (!focusedSpecName()) {
       return true;
     }
-    return spec.getFullName().indexOf(paramMap.spec) === 0;
+
+    return spec.getFullName().indexOf(focusedSpecName()) === 0;
   };
 
   return self;
+
+  function focusedSpecName() {
+    var specName;
+
+    (function memoizeFocusedSpec() {
+      if (specName) {
+        return;
+      }
+
+      var paramMap = [];
+      var params = doc.location.search.substring(1).split('&');
+
+      for (var i = 0; i < params.length; i++) {
+        var p = params[i].split('=');
+        paramMap[decodeURIComponent(p[0])] = decodeURIComponent(p[1]);
+      }
+
+      specName = paramMap.spec;
+    })();
+
+    return specName;
+  }
+
 };
