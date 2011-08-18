@@ -6,13 +6,11 @@ jasmine.HtmlReporter.ReporterView = function(specs, specFilter, dom, views) {
   this.failedCount = 0;
   this.skippedCount = 0;
 
-  var createDom = jasmine.HtmlReporter.createDom;
-
   this.createResultsMenu = function() {
-    this.resultsMenu = createDom('span', {className: 'resultsMenu bar'},
-        this.summaryMenuItem = createDom('a', {className: 'summaryMenuItem', href: "#"}, '0 specs'),
+    this.resultsMenu = this.createDom('span', {className: 'resultsMenu bar'},
+        this.summaryMenuItem = this.createDom('a', {className: 'summaryMenuItem', href: "#"}, '0 specs'),
         ' | ',
-        this.detailsMenuItem = createDom('a', {className: 'detailsMenuItem', href: "#"}, '0 failing'));
+        this.detailsMenuItem = this.createDom('a', {className: 'detailsMenuItem', href: "#"}, '0 failing'));
 
     this.summaryMenuItem.onclick = function() {
       dom.reporter.className = dom.reporter.className.replace(/ showDetails/g, '');
@@ -45,20 +43,20 @@ jasmine.HtmlReporter.ReporterView = function(specs, specFilter, dom, views) {
 
   this.refresh = function() {
     if (typeof this.runningAlert == 'undefined') {
-      this.runningAlert = createDom('a', {href: "?", className: "runningAlert bar"});
+      this.runningAlert = this.createDom('a', {href: "?", className: "runningAlert bar"});
       dom.alert.appendChild(this.runningAlert);
     }
 
     if (typeof this.skippedAlert == 'undefined') {
-      this.skippedAlert = createDom('a', {href: "?", className: "skippedAlert bar"});
+      this.skippedAlert = this.createDom('a', {href: "?", className: "skippedAlert bar"});
     }
 
     if (typeof this.passedAlert == 'undefined') {
-      this.passedAlert = createDom('span', {href: "?", className: "passingAlert bar"});
+      this.passedAlert = this.createDom('span', {href: "?", className: "passingAlert bar"});
     }
 
     if (typeof this.failedAlert == 'undefined') {
-      this.failedAlert = createDom('span', {href: "?", className: "failingAlert bar"});
+      this.failedAlert = this.createDom('span', {href: "?", className: "failingAlert bar"});
     }
 
     if (typeof this.resultsMenu == 'undefined') {
@@ -90,12 +88,12 @@ jasmine.HtmlReporter.ReporterView = function(specs, specFilter, dom, views) {
 
     // if all specs are passing, show passing alert else show failing details
     if (this.failedCount === 0) {
-      dom.alert.appendChild(createDom('span', {className: 'passingAlert bar'}, "Passing " + this.passedCount + " spec" + (this.passedCount == 1 ? "" : "s" )));
+      dom.alert.appendChild(this.createDom('span', {className: 'passingAlert bar'}, "Passing " + this.passedCount + " spec" + (this.passedCount == 1 ? "" : "s" )));
     } else {
       showDetails();
     }
 
-    dom.banner.appendChild(createDom('span', {className: 'duration'}, "finished in " + ((new Date().getTime() - this.startedAt.getTime()) / 1000) + "s"));
+    dom.banner.appendChild(this.createDom('span', {className: 'duration'}, "finished in " + ((new Date().getTime() - this.startedAt.getTime()) / 1000) + "s"));
   };
 
   for (var i = 0; i < specs.length; i++) {
@@ -116,3 +114,6 @@ jasmine.HtmlReporter.ReporterView = function(specs, specFilter, dom, views) {
     }
   }
 };
+jasmine.HtmlReporterHelpers.addHelpers(jasmine.HtmlReporter.ReporterView);
+
+

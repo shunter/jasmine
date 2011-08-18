@@ -1,4 +1,6 @@
-jasmine.HtmlReporter.createDom = function(type, attrs, childrenVarArgs) {
+jasmine.HtmlReporterHelpers = {};
+
+jasmine.HtmlReporterHelpers.createDom = function(type, attrs, childrenVarArgs) {
   var el = document.createElement(type);
 
   for (var i = 2; i < arguments.length; i++) {
@@ -24,7 +26,7 @@ jasmine.HtmlReporter.createDom = function(type, attrs, childrenVarArgs) {
   return el;
 };
 
-jasmine.HtmlReporter.getSpecStatus = function(child) {
+jasmine.HtmlReporterHelpers.getSpecStatus = function(child) {
   var results = child.results();
   var status = results.passed() ? 'passed' : 'failed';
   if (results.skipped) {
@@ -32,5 +34,27 @@ jasmine.HtmlReporter.getSpecStatus = function(child) {
   }
 
   return status;
+};
+
+jasmine.HtmlReporterHelpers.appendToSummary = function(child, childElement, dom, views) {
+  var parentDiv = dom.summary;
+  var parentSuite = (typeof child.parentSuite == 'undefined') ? 'suite' : 'parentSuite';
+  var parent = child[parentSuite];
+
+  if (parent) {
+    if (typeof views.suites[parent.id] == 'undefined') {
+      views.suites[parent.id] = new jasmine.HtmlReporter.SuiteView(parent, dom, views);
+    }
+    parentDiv = views.suites[parent.id].element;
+  }
+
+  parentDiv.appendChild(childElement);
+};
+
+
+jasmine.HtmlReporterHelpers.addHelpers = function(ctor) {
+  for(var fn in jasmine.HtmlReporterHelpers) {
+    ctor.prototype[fn] = jasmine.HtmlReporterHelpers[fn];
+  }
 };
 

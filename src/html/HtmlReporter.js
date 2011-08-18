@@ -1,5 +1,4 @@
 jasmine.HtmlReporter = function(__doc) {
-  var createDom = jasmine.HtmlReporter.createDom;
   var SpecView = jasmine.HtmlReporter.SpecView;
 
   var self = this;
@@ -29,16 +28,16 @@ jasmine.HtmlReporter = function(__doc) {
     reporterView = new jasmine.HtmlReporter.ReporterView(specs, self.specFilter, dom, views);
 
     function createReporterDom(dom, version) {
-      dom.reporter = createDom('div', { className: 'jasmine_reporter' },
-        dom.banner = createDom('div', { className: 'banner' },
-          createDom('span', { className: 'title' }, "Jasmine "),
-          createDom('span', { className: 'version' }, version)),
+      dom.reporter = self.createDom('div', { className: 'jasmine_reporter' },
+        dom.banner = self.createDom('div', { className: 'banner' },
+          self.createDom('span', { className: 'title' }, "Jasmine "),
+          self.createDom('span', { className: 'version' }, version)),
 
-        dom.symbolSummary = createDom('ul', {className: 'symbolSummary'}),
-        dom.alert = createDom('div', {className: 'alert'}),
-        dom.results = createDom('div', {className: 'results'},
-          dom.summary = createDom('div', { className: 'summary' }),
-          dom.details = createDom('div', { id: 'details' }))
+        dom.symbolSummary = self.createDom('ul', {className: 'symbolSummary'}),
+        dom.alert = self.createDom('div', {className: 'alert'}),
+        dom.results = self.createDom('div', {className: 'results'},
+          dom.summary = self.createDom('div', { className: 'summary' }),
+          dom.details = self.createDom('div', { id: 'details' }))
       );
     }
   };
@@ -115,5 +114,5 @@ jasmine.HtmlReporter = function(__doc) {
 
     return specName;
   }
-
 };
+jasmine.HtmlReporterHelpers.addHelpers(jasmine.HtmlReporter);
