@@ -47,7 +47,7 @@ jasmine.HtmlReporter = function(__doc) {
   };
 
   self.reportSuiteResults = function(suite) {
-    if (typeof views.suites[suite.id] == 'undefined') {
+    if (isUndefined(views.suites[suite.id])) {
       return;
     }
     views.suites[suite.id].refresh();
@@ -63,7 +63,7 @@ jasmine.HtmlReporter = function(__doc) {
     var specView = views.specs[spec.id];
 
     // TODO: is this code ever used? Maybe in the case of an it without a suite, but that's not allowed, right?
-    if (typeof views.specs[spec.id] == 'undefined') {
+    if (isUndefined(views.specs[spec.id])) {
       views.specs[spec.id] = new SpecView(spec, dom, views);
       specView = views.specs[spec.id];
     }
@@ -113,6 +113,10 @@ jasmine.HtmlReporter = function(__doc) {
     })();
 
     return specName;
+  }
+
+  function isUndefined(obj) {
+    return typeof obj === 'undefined';
   }
 };
 jasmine.HtmlReporterHelpers.addHelpers(jasmine.HtmlReporter);

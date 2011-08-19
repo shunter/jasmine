@@ -42,41 +42,47 @@ jasmine.HtmlReporter.ReporterView = function(specs, specFilter, dom, views) {
   };
 
   this.refresh = function() {
-    if (typeof this.runningAlert == 'undefined') {
-      this.runningAlert = this.createDom('a', {href: "?", className: "runningAlert bar"});
-      dom.alert.appendChild(this.runningAlert);
-    }
 
-    if (typeof this.skippedAlert == 'undefined') {
-      this.skippedAlert = this.createDom('a', {href: "?", className: "skippedAlert bar"});
-    }
-
-    if (typeof this.passedAlert == 'undefined') {
-      this.passedAlert = this.createDom('span', {href: "?", className: "passingAlert bar"});
-    }
-
-    if (typeof this.failedAlert == 'undefined') {
-      this.failedAlert = this.createDom('span', {href: "?", className: "failingAlert bar"});
-    }
-
-    if (typeof this.resultsMenu == 'undefined') {
+    if (isUndefined(this.resultsMenu)) {
       this.createResultsMenu();
     }
 
-    if (this.skippedCount === 1 && typeof dom.alert != 'undefined') {
+    // currently running UI
+    if (isUndefined(this.runningAlert)) {
+      this.runningAlert = this.createDom('a', {href: "?", className: "runningAlert bar"});
+      dom.alert.appendChild(this.runningAlert);
+    }
+    this.runningAlert.innerHTML = "Running " + this.completeSpecCount + " of " + this.totalSpecCount + " spec" + (this.totalSpecCount == 1 ? "" : "s" );
+
+    // skipped specs UI
+    if (isUndefined(this.skippedAlert)) {
+      this.skippedAlert = this.createDom('a', {href: "?", className: "skippedAlert bar"});
+    }
+
+    this.skippedAlert.innerHTML = "Skipping " + this.skippedCount + " of " + this.totalSpecCount + " spec" + (this.totalSpecCount == 1 ? "" : "s" ) + " - run all";
+
+    if (this.skippedCount === 1 && isDefined(dom.alert)) {
       dom.alert.appendChild(this.skippedAlert);
     }
 
-    if (this.failedCount === 1 && typeof dom.alert != 'undefined') {
+    // passing specs UI
+    if (isUndefined(this.passedAlert)) {
+      this.passedAlert = this.createDom('span', {href: "?", className: "passingAlert bar"});
+    }
+    this.passedAlert.innerHTML = "Passing " + this.passedCount + " spec" + (this.passedCount == 1 ? "" : "s" );
+
+    // failing specs UI
+    if (isUndefined(this.failedAlert)) {
+      this.failedAlert = this.createDom('span', {href: "?", className: "failingAlert bar"});
+    }
+    this.failedAlert.innerHTML = "Failing " + this.failedCount + " spec" + (this.totalSpecCount == 1 ? "" : "s" );
+
+    if (this.failedCount === 1 && isDefined(dom.alert)) {
       dom.alert.appendChild(this.failedAlert);
       dom.alert.appendChild(this.resultsMenu);
     }
 
-    this.runningAlert.innerHTML = "Running " + this.completeSpecCount + " of " + this.totalSpecCount + " spec" + (this.totalSpecCount == 1 ? "" : "s" );
-    this.passedAlert.innerHTML = "Passing " + this.passedCount + " spec" + (this.passedCount == 1 ? "" : "s" );
-    this.failedAlert.innerHTML = "Failing " + this.failedCount + " spec" + (this.totalSpecCount == 1 ? "" : "s" );
-    this.skippedAlert.innerHTML = "Skipping " + this.skippedCount + " of " + this.totalSpecCount + " spec" + (this.totalSpecCount == 1 ? "" : "s" ) + " - run all";
-
+    // summary info
     this.summaryMenuItem.innerHTML = "" + this.runningSpecCount + " spec" + (this.runningSpecCount == 1 ? "" : "s" );
     this.detailsMenuItem.innerHTML = "" + this.failedCount + " failing";
   };
@@ -113,7 +119,16 @@ jasmine.HtmlReporter.ReporterView = function(specs, specFilter, dom, views) {
       dom.reporter.className += " showDetails";
     }
   }
+
+  function isUndefined(obj) {
+    return typeof obj === 'undefined';
+  }
+
+  function isDefined(obj) {
+    return !isUndefined(obj);
+  }
 };
+
 jasmine.HtmlReporterHelpers.addHelpers(jasmine.HtmlReporter.ReporterView);
 
 
