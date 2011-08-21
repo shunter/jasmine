@@ -1,5 +1,7 @@
-jasmine.HtmlReporter.ReporterView = function(specs, specFilter, dom, views) {
+jasmine.HtmlReporter.ReporterView = function(dom, totalSpecCount) {
   this.startedAt = new Date();
+
+  this.totalSpecCount = totalSpecCount;
   this.runningSpecCount = 0;
   this.completeSpecCount = 0;
   this.passedCount = 0;
@@ -92,7 +94,6 @@ jasmine.HtmlReporter.ReporterView = function(specs, specFilter, dom, views) {
 
     this.skippedAlert.innerHTML = "Ran " + this.runningSpecCount + " of " + this.totalSpecCount + " spec" + (this.totalSpecCount == 1 ? "" : "s" ) + " - run all";
 
-    // if all specs are passing, show passing alert else show failing details
     if (this.failedCount === 0) {
       dom.alert.appendChild(this.createDom('span', {className: 'passingAlert bar'}, "Passing " + this.passedCount + " spec" + (this.passedCount == 1 ? "" : "s" )));
     } else {
@@ -101,16 +102,6 @@ jasmine.HtmlReporter.ReporterView = function(specs, specFilter, dom, views) {
 
     dom.banner.appendChild(this.createDom('span', {className: 'duration'}, "finished in " + ((new Date().getTime() - this.startedAt.getTime()) / 1000) + "s"));
   };
-
-  for (var i = 0; i < specs.length; i++) {
-    var currentSpec = specs[i];
-    views.specs[currentSpec.id] = new jasmine.HtmlReporter.SpecView(currentSpec, dom, views);
-    if (specFilter(currentSpec)) {
-      this.runningSpecCount++;
-    }
-  }
-
-  this.totalSpecCount = specs.length;
 
   return this;
 

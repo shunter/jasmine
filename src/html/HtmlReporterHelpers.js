@@ -36,16 +36,16 @@ jasmine.HtmlReporterHelpers.getSpecStatus = function(child) {
   return status;
 };
 
-jasmine.HtmlReporterHelpers.appendToSummary = function(child, childElement, dom, views) {
-  var parentDiv = dom.summary;
+jasmine.HtmlReporterHelpers.appendToSummary = function(child, childElement) {
+  var parentDiv = this.dom.summary;
   var parentSuite = (typeof child.parentSuite == 'undefined') ? 'suite' : 'parentSuite';
   var parent = child[parentSuite];
 
   if (parent) {
-    if (typeof views.suites[parent.id] == 'undefined') {
-      views.suites[parent.id] = new jasmine.HtmlReporter.SuiteView(parent, dom, views);
+    if (typeof this.views.suites[parent.id] == 'undefined') {
+      this.views.suites[parent.id] = new jasmine.HtmlReporter.SuiteView(parent, this.dom, this.views);
     }
-    parentDiv = views.suites[parent.id].element;
+    parentDiv = this.views.suites[parent.id].element;
   }
 
   parentDiv.appendChild(childElement);

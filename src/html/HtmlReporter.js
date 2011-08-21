@@ -1,8 +1,6 @@
-jasmine.HtmlReporter = function(__doc) {
-  var SpecView = jasmine.HtmlReporter.SpecView;
-
+jasmine.HtmlReporter = function(_doc) {
   var self = this;
-  var doc = __doc || window.document;
+  var doc = _doc || window.document;
 
   var reporterView;
 
@@ -22,12 +20,20 @@ jasmine.HtmlReporter = function(__doc) {
       return;
     }
 
-    createReporterDom(dom, runner.env.versionString());
+    createReporterDom(runner.env.versionString());
     doc.body.appendChild(dom.reporter);
 
-    reporterView = new jasmine.HtmlReporter.ReporterView(specs, self.specFilter, dom, views);
+    reporterView = new jasmine.HtmlReporter.ReporterView(dom, specs.length);
 
-    function createReporterDom(dom, version) {
+    for (var i = 0; i < specs.length; i++) {
+      var spec = specs[i];
+      views.specs[spec.id] = new jasmine.HtmlReporter.SpecView(spec, dom, views);
+      if (self.specFilter(spec)) {
+        reporterView.runningSpecCount++;
+      }
+    }
+
+    function createReporterDom(version) {
       dom.reporter = self.createDom('div', { className: 'jasmine_reporter' },
         dom.banner = self.createDom('div', { className: 'banner' },
           self.createDom('span', { className: 'title' }, "Jasmine "),

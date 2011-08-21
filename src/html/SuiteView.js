@@ -7,7 +7,7 @@ jasmine.HtmlReporter.SuiteView = function(suite, dom, views) {
       this.createDom('a', { className: 'description', href: '?spec=' + encodeURIComponent(this.suite.getFullName()) }, this.suite.description)
   );
 
-  this.appendToSummary(this.suite, this.element, dom, views);
+  this.appendToSummary(this.suite, this.element);
 };
 
 jasmine.HtmlReporter.SuiteView.prototype.status = function() {
