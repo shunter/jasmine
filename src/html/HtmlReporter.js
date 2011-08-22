@@ -67,13 +67,6 @@ jasmine.HtmlReporter = function(_doc) {
 
   self.reportSpecResults = function(spec) {
     var specView = views.specs[spec.id];
-
-    // TODO: is this code ever used? Maybe in the case of an it without a suite, but that's not allowed, right?
-    if (isUndefined(views.specs[spec.id])) {
-      views.specs[spec.id] = new SpecView(spec, dom, views);
-      specView = views.specs[spec.id];
-    }
-
     specView.refresh();
     reporterView.specComplete(specView);
   };

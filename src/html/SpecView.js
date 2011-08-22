@@ -3,10 +3,10 @@ jasmine.HtmlReporter.SpecView = function(spec, dom, views) {
   this.dom = dom;
   this.views = views;
 
-  this.symbolEl = this.createDom('li', { className: 'pending' });
-  this.dom.symbolSummary.appendChild(this.symbolEl);
+  this.symbol = this.createDom('li', { className: 'pending' });
+  this.dom.symbolSummary.appendChild(this.symbol);
 
-  this.summaryEl = this.createDom('div', { className: 'specSummary' },
+  this.summary = this.createDom('div', { className: 'specSummary' },
       this.createDom('a', {
         className: 'description',
         href: '?spec=' + encodeURIComponent(this.spec.getFullName()),
@@ -14,7 +14,7 @@ jasmine.HtmlReporter.SpecView = function(spec, dom, views) {
       }, this.spec.description)
   );
 
-  this.detailEl = this.createDom('div', { className: 'specDetail' },
+  this.detail = this.createDom('div', { className: 'specDetail' },
       this.createDom('a', {
         className: 'description',
         href: '?spec=' + encodeURIComponent(this.spec.getFullName()),
@@ -28,7 +28,7 @@ jasmine.HtmlReporter.SpecView.prototype.status = function() {
 };
 
 jasmine.HtmlReporter.SpecView.prototype.refresh = function() {
-  this.symbolEl.className = this.status();
+  this.symbol.className = this.status();
 
   switch (this.status()) {
     case 'skipped':
@@ -46,12 +46,12 @@ jasmine.HtmlReporter.SpecView.prototype.refresh = function() {
 };
 
 jasmine.HtmlReporter.SpecView.prototype.appendSummaryToSuiteDiv = function() {
-  this.summaryEl.className += ' ' + this.status();
-  this.appendToSummary(this.spec, this.summaryEl);
+  this.summary.className += ' ' + this.status();
+  this.appendToSummary(this.spec, this.summary);
 };
 
 jasmine.HtmlReporter.SpecView.prototype.appendFailureDetail = function() {
-  this.detailEl.className += ' ' + this.status();
+  this.detail.className += ' ' + this.status();
 
   var resultItems = this.spec.results().getItems();
   var messagesDiv = this.createDom('div', { className: 'messages' });
@@ -71,8 +71,8 @@ jasmine.HtmlReporter.SpecView.prototype.appendFailureDetail = function() {
   }
 
   if (messagesDiv.childNodes.length > 0) {
-    this.detailEl.appendChild(messagesDiv);
-    this.dom.details.appendChild(this.detailEl);
+    this.detail.appendChild(messagesDiv);
+    this.dom.details.appendChild(this.detail);
   }
 };
 
