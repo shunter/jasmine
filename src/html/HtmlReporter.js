@@ -5,10 +5,7 @@ jasmine.HtmlReporter = function(_doc) {
   var reporterView;
 
   var dom = {};
-  var views = {
-    suites: {},
-    specs: {}
-  };
+  var views;
 
   // Jasmine Reporter Public Interface
   self.logRunningSpecs = false;
@@ -23,29 +20,8 @@ jasmine.HtmlReporter = function(_doc) {
     createReporterDom(runner.env.versionString());
     doc.body.appendChild(dom.reporter);
 
-    reporterView = new jasmine.HtmlReporter.ReporterView(dom, specs.length);
-
-    for (var i = 0; i < specs.length; i++) {
-      var spec = specs[i];
-      views.specs[spec.id] = new jasmine.HtmlReporter.SpecView(spec, dom, views);
-      if (self.specFilter(spec)) {
-        reporterView.runningSpecCount++;
-      }
-    }
-
-    function createReporterDom(version) {
-      dom.reporter = self.createDom('div', { className: 'jasmine_reporter' },
-        dom.banner = self.createDom('div', { className: 'banner' },
-          self.createDom('span', { className: 'title' }, "Jasmine "),
-          self.createDom('span', { className: 'version' }, version)),
-
-        dom.symbolSummary = self.createDom('ul', {className: 'symbolSummary'}),
-        dom.alert = self.createDom('div', {className: 'alert'}),
-        dom.results = self.createDom('div', {className: 'results'},
-          dom.summary = self.createDom('div', { className: 'summary' }),
-          dom.details = self.createDom('div', { id: 'details' }))
-      );
-    }
+    reporterView = new jasmine.HtmlReporter.ReporterView(dom);
+    views = reporterView.addSpecs(specs, self.specFilter);
   };
 
   self.reportRunnerResults = function(runner) {
@@ -112,6 +88,20 @@ jasmine.HtmlReporter = function(_doc) {
     })();
 
     return specName;
+  }
+
+  function createReporterDom(version) {
+    dom.reporter = self.createDom('div', { className: 'jasmine_reporter' },
+      dom.banner = self.createDom('div', { className: 'banner' },
+        self.createDom('span', { className: 'title' }, "Jasmine "),
+        self.createDom('span', { className: 'version' }, version)),
+
+      dom.symbolSummary = self.createDom('ul', {className: 'symbolSummary'}),
+      dom.alert = self.createDom('div', {className: 'alert'}),
+      dom.results = self.createDom('div', {className: 'results'},
+        dom.summary = self.createDom('div', { className: 'summary' }),
+        dom.details = self.createDom('div', { id: 'details' }))
+    );
   }
 
   function isUndefined(obj) {

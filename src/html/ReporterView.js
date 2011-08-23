@@ -1,7 +1,5 @@
-jasmine.HtmlReporter.ReporterView = function(dom, totalSpecCount) {
+jasmine.HtmlReporter.ReporterView = function(dom) {
   this.startedAt = new Date();
-
-  this.totalSpecCount = totalSpecCount;
   this.runningSpecCount = 0;
   this.completeSpecCount = 0;
   this.passedCount = 0;
@@ -10,9 +8,9 @@ jasmine.HtmlReporter.ReporterView = function(dom, totalSpecCount) {
 
   this.createResultsMenu = function() {
     this.resultsMenu = this.createDom('span', {className: 'resultsMenu bar'},
-        this.summaryMenuItem = this.createDom('a', {className: 'summaryMenuItem', href: "#"}, '0 specs'),
-        ' | ',
-        this.detailsMenuItem = this.createDom('a', {className: 'detailsMenuItem', href: "#"}, '0 failing'));
+      this.summaryMenuItem = this.createDom('a', {className: 'summaryMenuItem', href: "#"}, '0 specs'),
+      ' | ',
+      this.detailsMenuItem = this.createDom('a', {className: 'detailsMenuItem', href: "#"}, '0 failing'));
 
     this.summaryMenuItem.onclick = function() {
       dom.reporter.className = dom.reporter.className.replace(/ showDetails/g, '');
@@ -101,6 +99,25 @@ jasmine.HtmlReporter.ReporterView = function(dom, totalSpecCount) {
     }
 
     dom.banner.appendChild(this.createDom('span', {className: 'duration'}, "finished in " + ((new Date().getTime() - this.startedAt.getTime()) / 1000) + "s"));
+  };
+
+  this.addSpecs = function(specs, specFilter) {
+    this.totalSpecCount = specs.length;
+
+    var views = {
+      specs: {},
+      suites: {}
+    };
+
+    for (var i = 0; i < specs.length; i++) {
+      var spec = specs[i];
+      views.specs[spec.id] = new jasmine.HtmlReporter.SpecView(spec, dom, views);
+      if (specFilter(spec)) {
+        this.runningSpecCount++;
+      }
+    }
+
+    return views;
   };
 
   return this;
