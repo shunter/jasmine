@@ -21,8 +21,9 @@ jasmine.HtmlReporter.ReporterView = function(dom) {
     };
   };
 
-  this.specComplete = function(specView) {
+  this.specComplete = function(spec) {
     this.completeSpecCount++;
+    var specView = this.views.specs[spec.id];
 
     switch (specView.status()) {
       case 'passed':
@@ -38,7 +39,16 @@ jasmine.HtmlReporter.ReporterView = function(dom) {
         break;
     }
 
+    specView.refresh();
     this.refresh();
+  };
+
+  this.suiteComplete = function(suite) {
+    var suiteView = this.views.suites[suite.id];
+    if (isUndefined(suiteView)) {
+      return;
+    }
+    suiteView.refresh();
   };
 
   this.refresh = function() {
@@ -104,20 +114,18 @@ jasmine.HtmlReporter.ReporterView = function(dom) {
   this.addSpecs = function(specs, specFilter) {
     this.totalSpecCount = specs.length;
 
-    var views = {
+    this.views = {
       specs: {},
       suites: {}
     };
 
     for (var i = 0; i < specs.length; i++) {
       var spec = specs[i];
-      views.specs[spec.id] = new jasmine.HtmlReporter.SpecView(spec, dom, views);
+      this.views.specs[spec.id] = new jasmine.HtmlReporter.SpecView(spec, dom, this.views);
       if (specFilter(spec)) {
         this.runningSpecCount++;
       }
     }
-
-    return views;
   };
 
   return this;

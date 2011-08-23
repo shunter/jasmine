@@ -5,7 +5,6 @@ jasmine.HtmlReporter = function(_doc) {
   var reporterView;
 
   var dom = {};
-  var views;
 
   // Jasmine Reporter Public Interface
   self.logRunningSpecs = false;
@@ -21,7 +20,7 @@ jasmine.HtmlReporter = function(_doc) {
     doc.body.appendChild(dom.reporter);
 
     reporterView = new jasmine.HtmlReporter.ReporterView(dom);
-    views = reporterView.addSpecs(specs, self.specFilter);
+    reporterView.addSpecs(specs, self.specFilter);
   };
 
   self.reportRunnerResults = function(runner) {
@@ -29,10 +28,7 @@ jasmine.HtmlReporter = function(_doc) {
   };
 
   self.reportSuiteResults = function(suite) {
-    if (isUndefined(views.suites[suite.id])) {
-      return;
-    }
-    views.suites[suite.id].refresh();
+    reporterView.suiteComplete(suite);
   };
 
   self.reportSpecStarting = function(spec) {
@@ -42,9 +38,7 @@ jasmine.HtmlReporter = function(_doc) {
   };
 
   self.reportSpecResults = function(spec) {
-    var specView = views.specs[spec.id];
-    specView.refresh();
-    reporterView.specComplete(specView);
+    reporterView.specComplete(spec);
   };
 
   self.log = function() {
@@ -102,10 +96,6 @@ jasmine.HtmlReporter = function(_doc) {
         dom.summary = self.createDom('div', { className: 'summary' }),
         dom.details = self.createDom('div', { id: 'details' }))
     );
-  }
-
-  function isUndefined(obj) {
-    return typeof obj === 'undefined';
   }
 };
 jasmine.HtmlReporterHelpers.addHelpers(jasmine.HtmlReporter);
