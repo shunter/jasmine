@@ -21,8 +21,30 @@ jasmine.HtmlReporter.ReporterView = function(dom) {
     };
   };
 
+  this.addSpecs = function(specs, specFilter) {
+    this.totalSpecCount = specs.length;
+
+    this.views = {
+      specs: {},
+      suites: {}
+    };
+
+    for (var i = 0; i < specs.length; i++) {
+      var spec = specs[i];
+      this.views.specs[spec.id] = new jasmine.HtmlReporter.SpecView(spec, dom, this.views);
+      if (specFilter(spec)) {
+        this.runningSpecCount++;
+      }
+    }
+  };
+
   this.specComplete = function(spec) {
     this.completeSpecCount++;
+
+    if (isUndefined(this.views.specs[spec.id])) {
+      this.views.specs[spec.id] = new jasmine.HtmlReporter.SpecView(spec, dom);
+    }
+
     var specView = this.views.specs[spec.id];
 
     switch (specView.status()) {
@@ -109,23 +131,6 @@ jasmine.HtmlReporter.ReporterView = function(dom) {
     }
 
     dom.banner.appendChild(this.createDom('span', {className: 'duration'}, "finished in " + ((new Date().getTime() - this.startedAt.getTime()) / 1000) + "s"));
-  };
-
-  this.addSpecs = function(specs, specFilter) {
-    this.totalSpecCount = specs.length;
-
-    this.views = {
-      specs: {},
-      suites: {}
-    };
-
-    for (var i = 0; i < specs.length; i++) {
-      var spec = specs[i];
-      this.views.specs[spec.id] = new jasmine.HtmlReporter.SpecView(spec, dom, this.views);
-      if (specFilter(spec)) {
-        this.runningSpecCount++;
-      }
-    }
   };
 
   return this;
