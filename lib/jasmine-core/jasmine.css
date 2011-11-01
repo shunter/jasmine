@@ -4,11 +4,11 @@ body {
 
 
 .jasmine_reporter a:visited, .jasmine_reporter a {
-  color: #303; 
+  color: #303;
 }
 
 .jasmine_reporter a:hover, .jasmine_reporter a:active {
-  color: blue; 
+  color: blue;
 }
 
 .run_spec {
@@ -29,7 +29,6 @@ body {
 }
 
 .logo {
-  float: left;
   font-size: 1.1em;
   padding-left: 5px;
 }
@@ -43,15 +42,6 @@ body {
   background-color: yellow;
 }
 
-
-.options {
-  text-align: right;
-  font-size: .8em;
-}
-
-
-
-
 .suite {
   border: 1px outset gray;
   margin: 5px 0;
@@ -59,7 +49,7 @@ body {
 }
 
 .suite .suite {
-  margin: 5px; 
+  margin: 5px;
 }
 
 .suite.passed {
@@ -145,11 +135,34 @@ body {
   font-size: .6em;
 }
 
-.hide-passed .passed,
-.hide-skipped .skipped {
+.expander, .collapser {
+	padding-right: 0.5em;
+	cursor: pointer;
+}
+
+.collapse .spec,
+.collapse .suite,
+.collapse .collapser {
   display: none;
 }
 
+.collapse.failed .spec,
+.collapse.failed .suite {
+  display: block;
+}
+
+.collapse.failed .collapser {
+  display: inline;
+}
+
+.expander {
+  display: none;
+}
+
+.collapse.passed .expander,
+.collapse.skipped .expander  {
+  display: inline;
+}
 
 #jasmine_content {
   position:fixed;
